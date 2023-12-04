@@ -1,0 +1,63 @@
+---
+title: "506FinalProject"
+author: "Yangning Tan"
+date: "2023-12-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project
+
+We first import the original data.
+
+```{r}
+library(tidyverse)
+cbecs <- read.csv("/Users/tyn/Documents/R/data set/cbecs2018_final_public.csv")
+```
+
+Then, we do data cleaning.
+
+```{r}
+# select certain variables
+cbecs1 <- cbecs %>% 
+  select(SQFT, NFLOOR, WKHRS, HEATP,COOLP, LOHRPC, LNHRPC, 
+         MFBTU, ELBTU, NGBTU)
+
+# exclude data with na values  
+cbecs2 <- na.omit(cbecs1)
+
+# get the total energy consumption from three columns
+cbecs2$TOTBTU <- cbecs2$MFBTU + cbecs2$ELBTU + cbecs2$NGBTU
+
+# filter buildings with less than 10 floors
+cbecs3 <- cbecs2 %>% filter(NFLOOR < 10)
+```
+
+After cleaning the data, we can continue to conduct descriptive analysis.
+
+```{r}
+# histograms
+hist(cbecs3$SQFT, col = "lightblue", main = "Distribution Plot", xlab = "SQFT")
+
+hist(cbecs3$NFLOOR, col = "lightblue", main = "Distribution Plot", xlab = "NFLOOR")
+
+hist(cbecs3$WKHRS, col = "lightblue", main = "Distribution Plot", xlab = "WKHRS")
+
+hist(cbecs3$HEATP, col = "lightblue", main = "Distribution Plot", xlab = "HEATP")
+
+hist(cbecs3$COOLP, col = "lightblue", main = "Distribution Plot", xlab = "COOLP")
+
+hist(cbecs3$LOHRPC, col = "lightblue", main = "Distribution Plot", xlab = "LOHRPC")
+
+hist(cbecs3$LNHRPC, col = "lightblue", main = "Distribution Plot", xlab = "LNGRPC")
+```
+
+We further check the correlation between HEATP and COOLP.
+
+```{r}
+plot(cbecs3$HEATP, cbecs3$COOLP, main = "Correlation between HEATP and COOLP",
+     xlab = "HEATP", ylab = "COOLP", pch = 16, col = "blue")
+```
